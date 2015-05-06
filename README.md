@@ -15,5 +15,4 @@ Lotus Domino介绍
     1. Develop console;
     2. Run console;
     3. Elments you can drag or add easily;
-    4. Help.
-    5. Domino Java API
+    4. Domino Java API
