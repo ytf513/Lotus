@@ -1,19 +1,10 @@
-Lotus Domino介绍
-=====
-## Lotus Lotus Client
-* Lotus Designer
-* Lotus Adminstrator
-* Lotus Notes Client
+## About lotus_code
 
-## Lotus Domino
-> 这是Server，提供了`邮件`、`Web`、`数据库`等服务。
-  详细资料请参考：[Lotus Fans](http://www-03.ibm.com/software/products/zh/ibmnotes/ "Lotus Product")
-  
-## Lotus Designer
-    `Lotus Designer` is ready for Program Developer.It is a programming environment.
-    It contains the following features:
-    1. Develop console;
-    2. Run console;
-    3. Elments you can drag or add easily;
-    4. Integrated with third party system;
-    5. help
+This is My private Lotus Code and it contans:
+- Lotusscript
+- Lotus Formula
+
+内容来自两方面：
+- 自己测试或者项目代码片段
+- 网络搜索或参考他人的
+
