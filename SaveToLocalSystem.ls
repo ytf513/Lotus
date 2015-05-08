@@ -1,4 +1,4 @@
-'(�����ĵ�����������ϵͳ)|SaveToLocalSystem: 
+'(保存文档附件到本地系统)|SaveToLocalSystem: 
 
 Option Public
 
@@ -27,18 +27,18 @@ Declare Function SHBrowseForFolder Lib "shell32"(lpBrowseInfo As BROWSEINFO) As 
 Declare Sub CoTaskMemFree Lib "ole32" (Byval pv As Long) 
 Declare Function GetDesktopWindow Lib "user32" () As Long 
 
-'�Զ���ȫ�ֱ���
-Const rtfName="fldDocBody" 'rtf�ֶ�����
-Const categoryName="fldCateNamePath" '�����ֶ�
-Const seperator="\"  '�㼶Ŀ¼�������ֶηָ����Windowsƽ̨ʹ��"\",Unixʹ��"/"
+'自定义全局变量
+Const rtfName="fldDocBody" 'rtf字段名字
+Const categoryName="fldCateNamePath" '分类字段
+Const seperator="\"  '层级目录产生的字段分割符，Windows平台使用"\",Unix使用"/"
 Sub Initialize() 
 	'/***
 	' @Date 	2013-10-24
-	' @Author	�����	
+	' @Author	Alex Yean	
 	'  		
-	' �����������������ĳ�������ͼ��ѡ���ĵ������ĵ�ĳ��RTF�ֶ��еĸ������ڱ����ļ����У�
-	' ���������ͼ��һ�еķ��ഴ��Ŀ¼�㼶�����ļ�������Ӧ��Ŀ¼�㼶��
-	' ����:��ͼ��һ�з���Ϊ"AA/11",�����кܶ��ĵ�����ô��Ӧ�����ͻ����/AA/11Ŀ¼��
+	' 这是批量附件导出的程序：在视图中选择文档，把文档某个RTF字段中的附件放于本地文件夹中；
+	' 并会根据视图第一列的分类创建目录层级，把文件放于相应的目录层级中
+	' 例如:视图第一列分类为"AA/11",其下有很多文档，那么对应附件就会放在/AA/11目录中
 	' ***********************/
 	On Error Goto ErrHandler
 	
@@ -61,7 +61,7 @@ Sub Initialize()
 	pidl = SHBrowseForFolder(bi) 
 	
 	If pidl=0 Then
-		Exit Sub '�����ȡ����ť
+		Exit Sub '点击了取消按钮
 	End If
 	
 	path = Space$(MAX_PATH) 
@@ -81,20 +81,20 @@ Sub Initialize()
 	Dim desDir As String
 	Dim desDirVar As Variant
 	
-	Print "(�����ĵ�����������ϵͳ)|SaveToLocalSystem:������ָ��Ŀ¼�б��渽��,�����ĵȴ�..."
+	Print "(保存文档附件到本地系统)|SaveToLocalSystem:正在向指定目录中保存附件,请耐心等待..."
 	
 	While Not(doc Is Nothing)   
-     ' �˴��ٶ�������Ƕ���� Body ���У���ȻҲ����ѭ���ĵ����е���Ȼ����ڸ��ı�����д�������ȡ���� 
+     ' 此处假定附件是嵌入在 Body 域当中，当然也可以循环文档所有的域，然后对于富文本域进行处理，提取附件 
 		
-		Chdir(orgdir) '�ı䵽��ʼĿ¼
+		Chdir(orgdir) '改变到初始目录
 		desDir=doc.GetItemValue(categoryName)(0)
 		desDirVar=Split(desDir,seperator)
 		
 		Forall x In desDirVar
-			If Dir(x,16) = "" Then  '�Ƿ����Ŀ¼
-				Mkdir(x)           '�������򴴽�Ŀ¼  
+			If Dir(x,16) = "" Then  '是否存在目录
+				Mkdir(x)           '不存在则创建目录  
 			End If
-			Chdir(x)				'����Ŀ¼�󣬶�λ����Ŀ¼						
+			Chdir(x)				'存在目录后，定位到该目录						
 		End Forall
 		
 		
@@ -112,12 +112,12 @@ Sub Initialize()
 	Wend 
 	
 agEnd:	
-	Chdir(orgdir)  'ָ��ָ���Ǹ�Ŀ¼,�Ǹ�Ŀ¼���޷���ɾ��
-	Print db.Title + ":" + "����֮(�����ĵ�����������ϵͳ)|SaveToLocalSystem ����ִ�С�"
+	Chdir(orgdir)  '指针指在那个目录,那个目录就无法被删除
+	Print db.Title + ":" + "代理之(保存文档附件到本地系统)|SaveToLocalSystem 结束执行。"
 	Exit Sub
 	
 ErrHandler	:
-	Print "(�����ĵ�����������ϵͳ)|SaveToLocalSystem:" & Error & " " & Erl & "**" & Err
+	Print "(保存文档附件到本地系统)|SaveToLocalSystem:" & Error & " " & Erl & "**" & Err
 	Goto agEnd
 End Sub
 
